@@ -1,0 +1,13 @@
+[32mINFO    [0m utils.log_util:create_live_page.py:29 输入直播名称
+[32mINFO    [0m utils.log_util:create_live_page.py:31 输入直播介绍
+[32mINFO    [0m utils.log_util:create_live_page.py:33 向下滑动屏幕
+[32mINFO    [0m utils.log_util:create_live_page.py:35 点击选择老师
+[32mINFO    [0m utils.log_util:create_live_page.py:38 选择老师
+[32mINFO    [0m utils.log_util:create_live_page.py:40 点击请选择教室
+[32mINFO    [0m utils.log_util:create_live_page.py:44 选择教室
+[32mINFO    [0m utils.log_util:create_live_page.py:46 点击保存
+[32mINFO    [0m utils.log_util:create_live_page.py:61 点击直播管理,跳转到直播列表页面，清理数据
+[32mINFO    [0m utils.log_util:live_list_page.py:29 点击删除按钮
+[32mINFO    [0m utils.log_util:live_list_page.py:31 弹框点击确定
+[32mINFO    [0m utils.log_util:live_list_page.py:38 获取冒泡消息文本
+[32mINFO    [0m utils.log_util:live_list_page.py:42 冒泡信息为：直播删除成功
