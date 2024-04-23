@@ -1,5 +1,5 @@
 create_live:
-  - live_name: 创建直播名称01
+  - live_name: 创建直播名称001
     live_intro: 创建直播介绍
 del_live:
   - live_name: 删除直播名称

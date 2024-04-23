@@ -1,4 +1,5 @@
 import time
+import allure
 from selenium.webdriver.common.by import By
 from base.base_page import BasePage
 from page_objects.live_list_page import LiveList
@@ -21,41 +22,51 @@ class CreateLive(BasePage):
     @ui_exception_record
     def create_live(self, live_name, live_intro):
         logger.info("新增直播页：创建直播")
-        # 输入”直播名称“等信息
-        # 点击”确定“按钮
-        self.do_send_keys(live_name, self.__LIVE_NAME)
         logger.info("输入直播名称")
-        self.do_send_keys(live_intro, self.__LIVE_INTRO)
+        with allure.step("输入直播名称"):
+            self.do_send_keys(live_name, self.__LIVE_NAME)
         logger.info("输入直播介绍")
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        with allure.step("输入直播介绍"):
+            self.do_send_keys(live_intro, self.__LIVE_INTRO)
         logger.info("向下滑动屏幕")
-        self.do_find(self.__CLICK_CHOOSE).click()
+        with allure.step("向下滑动屏幕"):
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         logger.info("点击选择老师")
+        with allure.step("点击选择老师"):
+            self.do_find(self.__CLICK_CHOOSE).click()
         time.sleep(1)
-        self.do_find(self.__CHOOSE_TEACHER).click()
         logger.info("选择老师")
-        self.do_find(self.__CLICK_ROOM).click()
+        with allure.step("选择老师"):
+            self.do_find(self.__CHOOSE_TEACHER).click()
         logger.info("点击请选择教室")
+        with allure.step("点击请选择教室"):
+            self.do_find(self.__CLICK_ROOM).click()
         time.sleep(1)
         # 选择E02-Pro
-        self.do_find(self.__CHOOSE_ROOM).click()
         logger.info("选择教室")
-        self.do_find(self.__CLICK_SAVE).click()
+        with allure.step("选择教室"):
+            self.do_find(self.__CHOOSE_ROOM).click()
         logger.info("点击保存")
+        with allure.step("点击保存"):
+            self.do_find(self.__CLICK_SAVE).click()
         time.sleep(1)
         # ==>直播列表页
         return CreateLive(self.driver)
 
+    @ui_exception_record
     def get_operate_result(self):
         logger.info("创建直播页：获取操作结果")
         logger.info("获取冒泡消息文本")
-        toast = self.wait_element_until(self.__TOAST_ASSERT)
+        with allure.step("获取冒泡消息文本"):
+            toast = self.wait_element_until(self.__TOAST_ASSERT)
         msg = toast.text
         logger.info(f"冒泡信息为：{msg}")
         # ==>返回消息文本
         return msg
 
+    @ui_exception_record
     def click_live_manage(self):
         logger.info("点击直播管理,跳转到直播列表页面")
-        self.do_find(self.__LIVE_MANAGE).click()
+        with allure.step("点击直播管理,跳转到直播列表页面"):
+            self.do_find(self.__LIVE_MANAGE).click()
         return LiveList(self.driver)

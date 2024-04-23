@@ -1,4 +1,5 @@
 import time
+import allure
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from base.base_page import BasePage
@@ -21,20 +22,21 @@ class LiveList(BasePage):
     @ui_exception_record
     def click_add(self):
         logger.info("直播列表页：点击新增直播")
-        # 点击”新增直播“按钮
-        self.do_find(self.__CLICK_ADD).click()
+        with allure.step("点击新增直播按钮"):
+            self.do_find(self.__CLICK_ADD).click()
         # ==>新增直播页
         from page_objects.create_live_page import CreateLive
         return CreateLive(self.driver)
 
     @ui_exception_record
     def delete_live(self):
-        """删除自己创建的直播"""
-        self.do_find(self.__DEL).click()
         logger.info("点击删除按钮")
+        with allure.step("点击删除按钮"):
+            self.do_find(self.__DEL).click()
         time.sleep(1)
         logger.info("弹框点击确定")
-        self.do_find(self.__ALERT).click()
+        with allure.step("弹框点击确定"):
+            self.do_find(self.__ALERT).click()
         # ==》跳转到当前页面
         return LiveList(self.driver)
 
@@ -43,43 +45,52 @@ class LiveList(BasePage):
         logger.info("直播列表页：获取删除操作结果")
         logger.info("获取冒泡消息文本")
         time.sleep(2)
-        toast = self.wait_element_until(self.__DEL_SUCCESS)
-        msg = toast.text
+        with allure.step("显示等待获取冒泡消息文本"):
+            toast = self.wait_element_until(self.__DEL_SUCCESS)
+            msg = toast.text
         logger.info(f"冒泡信息为：{msg}")
         return msg
 
     @ui_exception_record
     def listing(self):
-        """上架"""
         logger.info("直播列表页：定位需要悬浮的元素")
-        hover_over = self.do_find(self.__HOVER_OVER)
+        with allure.step("定位需要悬浮的元素"):
+            hover_over = self.do_find(self.__HOVER_OVER)
         logger.info("创建一个ActionChains对象，将鼠标移动到元素 `hover_over` 上，然后执行操作")
-        ActionChains(self.driver).move_to_element(hover_over).perform()
+        with allure.step("创建一个ActionChains对象，将鼠标移动到元素 `hover_over` 上，然后执行操作"):
+            ActionChains(self.driver).move_to_element(hover_over).perform()
         logger.info("定位弹框显示的上架字样")
-        options = self.do_find(self.__OPTIONS)
+        with allure.step("定位弹框显示的上架字样"):
+            options = self.do_find(self.__OPTIONS)
         logger.info("创建一个ActionChains对象，对元素 `上架` 执行点击操作。")
-        ActionChains(self.driver).click(options).perform()
+        with allure.step("创建一个ActionChains对象，对元素 `上架` 执行点击操作。"):
+            ActionChains(self.driver).click(options).perform()
         logger.info("在确认上架弹框处点击确定")
-        self.do_find(self.__ALERT).click()
-        toast = self.wait_element_until(self.__Listing)
+        with allure.step("在确认上架弹框处点击确定"):
+            self.do_find(self.__ALERT).click()
+            toast = self.wait_element_until(self.__Listing)
         msg = toast.text
         logger.info(f"冒泡信息为：{msg}")
         return msg
 
     @ui_exception_record
     def remove_from_shelves(self):
-        """下架"""
         logger.info("直播列表页：定位需要悬浮的元素")
-        hover_over = self.do_find(self.__HOVER_OVER)
+        with allure.step("定位需要悬浮的元素"):
+            hover_over = self.do_find(self.__HOVER_OVER)
         logger.info("创建一个ActionChains对象，将鼠标移动到元素 `hover_over` 上，然后执行操作")
-        ActionChains(self.driver).move_to_element(hover_over).perform()
+        with allure.step("创建一个ActionChains对象，将鼠标移动到元素 `hover_over` 上，然后执行操作"):
+            ActionChains(self.driver).move_to_element(hover_over).perform()
         logger.info("定位弹框显示的下架字样")
-        options = self.do_find(self.__REMOVE_SHELVES)
+        with allure.step("定位弹框显示的下架字样"):
+            options = self.do_find(self.__REMOVE_SHELVES)
         logger.info("创建一个ActionChains对象，对元素 `下架` 执行点击操作。")
-        ActionChains(self.driver).click(options).perform()
+        with allure.step("创建一个ActionChains对象，对元素 `下架` 执行点击操作。"):
+            ActionChains(self.driver).click(options).perform()
         logger.info("在确认下架弹框处点击确定")
-        self.do_find(self.__ALERT).click()
-        toast = self.wait_element_until(self.__REMOVED)
+        with allure.step("在确认下架弹框处点击确定"):
+            self.do_find(self.__ALERT).click()
+            toast = self.wait_element_until(self.__REMOVED)
         msg = toast.text
         logger.info(f"冒泡信息为：{msg}")
         return msg

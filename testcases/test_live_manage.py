@@ -2,11 +2,13 @@
 # @Author   : Sam
 # @time 2024-03-09 11:03
 import time
+import allure
 import pytest
 from page_objects.login_page import LoginPage
 from testcases.conftest import get_data
 
 
+@allure.feature("直播管理模块")
 class TestLive:
 
     def setup_class(self):
@@ -25,8 +27,11 @@ class TestLive:
         self.live_list.do_quit()
 
     @pytest.mark.parametrize("data", get_data()["create_live"])
+    @allure.story("新增直播测试用例")
+    @allure.title("新增直播")
+    @allure.severity('critical')
+    @allure.description("新增直播")
     def test_create_live(self, data):
-        """新增直播"""
         create_page = self.live_list \
             .click_add() \
             .create_live(data["live_name"], data["live_intro"])
@@ -37,11 +42,11 @@ class TestLive:
         time.sleep(2)
 
     @pytest.mark.parametrize("data", get_data()["del_live"])
+    @allure.story("删除直播测试用例")
+    @allure.title("删除直播")
+    @allure.severity('critical')
+    @allure.description("删除直播")
     def test_del_live(self, data):
-        """
-        删除直播
-        :return:
-        """
         res = self.live_list \
             .click_add() \
             .create_live(data["live_name"], data["live_intro"]) \
@@ -51,8 +56,11 @@ class TestLive:
         assert "直播删除成功" == res
 
     @pytest.mark.parametrize("data", get_data()["create_live"])
+    @allure.story("上架直播测试用例")
+    @allure.title("上架直播")
+    @allure.severity('critical')
+    @allure.description("直播上架")
     def test_listing(self, data):
-        """直播上架"""
         list_page = self.live_list \
             .click_add() \
             .create_live(data["live_name"], data["live_intro"]) \
@@ -61,10 +69,14 @@ class TestLive:
         assert "上架成功" == res
         # 清理数据
         list_page.delete_live()
+        time.sleep(2)
 
     @pytest.mark.parametrize("data", get_data()["create_live"])
+    @allure.story("下架直播测试用例")
+    @allure.title("下架直播")
+    @allure.severity('critical')
+    @allure.description("直播下架")
     def test_remove_from_shelves(self, data):
-        """直播下架"""
         remove_page = self.live_list \
             .click_add() \
             .create_live(data["live_name"], data["live_intro"]) \
