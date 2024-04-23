@@ -50,6 +50,28 @@ class TestLive:
             .get_del_result()
         assert "直播删除成功" == res
 
+    @pytest.mark.parametrize("data", get_data()["create_live"])
+    def test_listing(self, data):
+        """直播上架"""
+        list_page = self.live_list \
+            .click_add() \
+            .create_live(data["live_name"], data["live_intro"]) \
+            .click_live_manage()
+        res = list_page.listing()
+        assert "上架成功" == res
+        # 清理数据
+        list_page.delete_live()
 
-if __name__ == '__main__':
-    pytest.main()
+    @pytest.mark.parametrize("data", get_data()["create_live"])
+    def test_remove_from_shelves(self, data):
+        """直播下架"""
+        remove_page = self.live_list \
+            .click_add() \
+            .create_live(data["live_name"], data["live_intro"]) \
+            .click_live_manage()
+        remove_page.listing()
+        time.sleep(2)
+        res = remove_page.remove_from_shelves()
+        assert "下架成功" == res
+        # 清理数据
+        remove_page.delete_live()

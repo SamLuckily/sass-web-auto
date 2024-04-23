@@ -31,7 +31,7 @@ class BasePage:
                 self.driver.refresh()
                 # 最大浏览器窗口操作
                 self.driver.maximize_window()
-                self.driver.implicitly_wait(20)
+                self.driver.implicitly_wait(10)
             else:
                 self.driver = webdriver.Chrome()
                 # 刷新浏览器
@@ -75,5 +75,5 @@ class BasePage:
 
     def wait_element_until(self, locator: tuple):
         """显示等待，冒泡消息文本"""
-        return WebDriverWait(self.driver, 10) \
+        return WebDriverWait(self.driver, 20) \
             .until(EC.presence_of_element_located(locator))
