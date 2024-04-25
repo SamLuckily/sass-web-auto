@@ -21,7 +21,7 @@ class CreateLive(BasePage):
 
     @ui_exception_record
     def create_live(self, live_name, live_intro):
-        logger.info("新增直播页：创建直播")
+        logger.info("创建直播页：创建直播")
         logger.info("输入直播名称")
         with allure.step("输入直播名称"):
             self.do_send_keys(live_name, self.__LIVE_NAME)
@@ -66,7 +66,7 @@ class CreateLive(BasePage):
 
     @ui_exception_record
     def click_live_manage(self):
-        logger.info("点击直播管理,跳转到直播列表页面")
+        logger.info("创建直播页：点击直播管理,跳转到直播列表页面")
         with allure.step("点击直播管理,跳转到直播列表页面"):
             self.do_find(self.__LIVE_MANAGE).click()
         return LiveList(self.driver)
