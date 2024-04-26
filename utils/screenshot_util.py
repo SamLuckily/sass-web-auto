@@ -21,8 +21,8 @@ def ui_exception_record(func):
             print("出现异常了")
             timestamp = int(time.time())
             # 注意：一定要提前创建好images路径
-            image_path = f"./images/image_{timestamp}.PNG"
-            page_source_path = f"./page_source/page_source_{timestamp}.html"
+            image_path = f"../images/image_{timestamp}.PNG"
+            page_source_path = f"../page_source/page_source_{timestamp}.html"
             # 截图
             driver.save_screenshot(image_path)
             # 记录page_source

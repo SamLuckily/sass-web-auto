@@ -18,10 +18,13 @@ class CreateLive(BasePage):
     __CLICK_SAVE = (By.CSS_SELECTOR, ".step-btn-group>button:nth-child(2)")  # 点击保存
     __TOAST_ASSERT = (By.XPATH, "//p[text()='直播信息保存成功']")  # toast信息
     __LIVE_MANAGE = (By.XPATH, "//span[@class='el-breadcrumb__inner is-link' and text()='直播管理']")  # 点击直播管理
+    __CLICK_SAVE_listing = (By.XPATH, "//span[text()=' 保存并上架 ']")  # 点击保存并上架
+    __CLICK_SAVE_LISTING = (By.XPATH, "//p[text()='直播信息保存成功']")
+    __EDIT_TOAST = (By.XPATH, "//p[text()='直播信息编辑成功']")  # 直播信息编辑成功
 
     @ui_exception_record
     def create_live(self, live_name, live_intro):
-        logger.info("创建直播页：创建直播")
+        logger.info("创建直播页：创建直播点击保存")
         logger.info("输入直播名称")
         with allure.step("输入直播名称"):
             self.do_send_keys(live_name, self.__LIVE_NAME)
@@ -50,7 +53,7 @@ class CreateLive(BasePage):
         with allure.step("点击保存"):
             self.do_find(self.__CLICK_SAVE).click()
         time.sleep(1)
-        # ==>直播列表页
+        # ==>创建直播页
         return CreateLive(self.driver)
 
     @ui_exception_record
@@ -70,3 +73,71 @@ class CreateLive(BasePage):
         with allure.step("点击直播管理,跳转到直播列表页面"):
             self.do_find(self.__LIVE_MANAGE).click()
         return LiveList(self.driver)
+
+    @ui_exception_record
+    def create_live_listing(self, live_name, live_intro):
+        logger.info("创建直播页：创建直播完成后点击保存并上架")
+        logger.info("输入直播名称")
+        with allure.step("输入直播名称"):
+            self.do_send_keys(live_name, self.__LIVE_NAME)
+        logger.info("输入直播介绍")
+        with allure.step("输入直播介绍"):
+            self.do_send_keys(live_intro, self.__LIVE_INTRO)
+        logger.info("向下滑动屏幕")
+        with allure.step("向下滑动屏幕"):
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        logger.info("点击选择老师")
+        with allure.step("点击选择老师"):
+            self.do_find(self.__CLICK_CHOOSE).click()
+        time.sleep(1)
+        logger.info("选择老师")
+        with allure.step("选择老师"):
+            self.do_find(self.__CHOOSE_TEACHER).click()
+        logger.info("点击请选择教室")
+        with allure.step("点击请选择教室"):
+            self.do_find(self.__CLICK_ROOM).click()
+        time.sleep(1)
+        # 选择E02-Pro
+        logger.info("选择教室")
+        with allure.step("选择教室"):
+            self.do_find(self.__CHOOSE_ROOM).click()
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        time.sleep(1)
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def get_save_listing_result(self):
+        logger.info("创建直播页：获取保存并上架后结果")
+        logger.info("获取冒泡消息文本")
+        with allure.step("获取冒泡消息文本"):
+            toast = self.wait_element_until(self.__CLICK_SAVE_LISTING)
+        msg = toast.text
+        logger.info(f"冒泡信息为：{msg}")
+        # ==>返回消息文本
+        return msg
+
+    @ui_exception_record
+    def edit_live_name(self, live_name):
+        logger.info("创建直播页：清空输入框并编辑直播名称")
+        logger.info("清空输入框并编辑直播名称")
+        with allure.step("清空输入框并编辑直播名称"):
+            self.do_send_keys(live_name, self.__LIVE_NAME)
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        time.sleep(1)
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def get_edit_name_result(self):
+        logger.info("创建直播页：获取编辑后结果")
+        logger.info("获取冒泡消息文本")
+        with allure.step("获取冒泡消息文本"):
+            toast = self.wait_element_until(self.__EDIT_TOAST)
+        msg = toast.text
+        logger.info(f"冒泡信息为：{msg}")
+        # ==>返回消息文本
+        return msg

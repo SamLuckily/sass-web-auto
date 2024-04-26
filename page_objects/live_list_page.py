@@ -19,6 +19,7 @@ class LiveList(BasePage):
     __Listing = (By.XPATH, "//*[text()='上架成功']")
     __REMOVE_SHELVES = (By.XPATH, "/html/body/div[2]/div[12]/div/div[1]/div/ul/li[2]")  # 定位下架
     __REMOVED = (By.XPATH, "//*[text()='下架成功']")
+    __EDIT = (By.XPATH, "/html/body/div[2]/div[12]/div/div[1]/div/ul/li[1]")  # 点击编辑
 
     @ui_exception_record
     def click_add(self):
@@ -40,7 +41,7 @@ class LiveList(BasePage):
 
     @ui_exception_record
     def delete_live(self):
-        logger.info("点击删除按钮")
+        logger.info("直播列表页：点击删除按钮")
         with allure.step("点击删除按钮"):
             self.do_find(self.__DEL).click()
         time.sleep(1)
@@ -78,6 +79,7 @@ class LiveList(BasePage):
         logger.info("在确认上架弹框处点击确定")
         with allure.step("在确认上架弹框处点击确定"):
             self.do_find(self.__ALERT).click()
+        time.sleep(2)
         return LiveList(self.driver)
 
     def get_listing_toast(self):
@@ -108,6 +110,7 @@ class LiveList(BasePage):
             self.do_find(self.__ALERT).click()
         return LiveList(self.driver)
 
+    @ui_exception_record
     def get_remove_shelves_toast(self):
         time.sleep(1)
         logger.info("直播列表页：获取下架成功toast")
@@ -116,3 +119,21 @@ class LiveList(BasePage):
             msg = toast.text
         logger.info(f"冒泡信息为：{msg}")
         return msg
+
+    @ui_exception_record
+    def click_edit(self):
+        logger.info("直播列表页：定位需要悬浮的元素")
+        with allure.step("定位需要悬浮的元素"):
+            hover_over = self.do_find(self.__HOVER_OVER)
+        logger.info("创建一个ActionChains对象，将鼠标移动到元素 `hover_over` 上，然后执行操作")
+        with allure.step("创建一个ActionChains对象，将鼠标移动到元素 `hover_over` 上，然后执行操作"):
+            ActionChains(self.driver).move_to_element(hover_over).perform()
+        logger.info("定位弹框显示的编辑字样")
+        with allure.step("定位弹框显示的编辑字样"):
+            options = self.do_find(self.__EDIT)
+        logger.info("创建一个ActionChains对象，对元素 `编辑` 执行点击操作。")
+        with allure.step("创建一个ActionChains对象，对元素 `编辑` 执行点击操作。"):
+            ActionChains(self.driver).click(options).perform()
+        from page_objects.create_live_page import CreateLive
+        return CreateLive(self.driver)
+

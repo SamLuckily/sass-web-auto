@@ -124,3 +124,32 @@ class TestLive:
         assert "下架成功" == res
         # 清理数据
         remove_page.delete_live()
+
+    @allure.story("保存并上架直播测试用例")
+    @allure.title("保存并上架直播")
+    @allure.severity('critical')
+    @allure.description("保存并上架直播")
+    def test_save_listing_live(self):
+        create_page = self.live_list \
+            .click_add() \
+            .create_live_listing(self.live_title, self.live_description)
+        res = create_page.get_save_listing_result()
+        assert "直播信息保存成功" == res
+        # 清理数据
+        create_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播名称测试用例")
+    @allure.title("编辑直播名称")
+    @allure.severity('critical')
+    @allure.description("编辑直播名称")
+    def test_listing_edit_live_name(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live(self.live_title, self.live_description)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .edit_live_name(self.live_title + "_edit") \
+            .get_edit_name_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
