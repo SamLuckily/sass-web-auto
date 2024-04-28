@@ -29,7 +29,6 @@ class LiveInfo(BasePage):
 
     @ui_exception_record
     def get_link_toast(self):
-        time.sleep(1)
         logger.info("查看直播页：获取点击直播链接toast")
         with allure.step("获取点击直播链接提示"):
             toast = self.wait_element_until(self.__CLICK_LINK_TOAST)

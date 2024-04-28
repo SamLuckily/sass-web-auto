@@ -21,6 +21,8 @@ class CreateLive(BasePage):
     __CLICK_SAVE_listing = (By.XPATH, "//span[text()=' 保存并上架 ']")  # 点击保存并上架
     __CLICK_SAVE_LISTING = (By.XPATH, "//p[text()='直播信息保存成功']")
     __EDIT_TOAST = (By.XPATH, "//p[text()='直播信息编辑成功']")  # 直播信息编辑成功
+    __UPLOAD_IMG = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(3) ul svg")  # 直播介绍点击上传图片按键
+    __INPUT_INTRO = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(3) input")  # 上传直播介绍input
 
     @ui_exception_record
     def create_live(self, live_name, live_intro):
@@ -132,7 +134,7 @@ class CreateLive(BasePage):
         return CreateLive(self.driver)
 
     @ui_exception_record
-    def get_edit_name_result(self):
+    def get_edit_result(self):
         logger.info("创建直播页：获取编辑后结果")
         logger.info("获取冒泡消息文本")
         with allure.step("获取冒泡消息文本"):
@@ -141,3 +143,30 @@ class CreateLive(BasePage):
         logger.info(f"冒泡信息为：{msg}")
         # ==>返回消息文本
         return msg
+
+    @ui_exception_record
+    def edit_live_introduce(self, live_intro):
+        logger.info("创建直播页：清空输入框并编辑直播介绍")
+        logger.info("清空输入框并编辑直播介绍")
+        with allure.step("清空输入框并编辑直播介绍"):
+            self.do_send_keys(live_intro, self.__LIVE_INTRO)
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        time.sleep(1)
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def upload_image(self):
+        logger.info("创建直播页：上传图片")
+        with allure.step("点击上传图片按键"):
+            self.do_find(self.__UPLOAD_IMG).click()
+        with allure.step("上传图片的input标签位置"):
+            ele_add = self.do_find(self.__INPUT_INTRO)
+        with allure.step("使用send_keys传文件路径"):
+            # send_keys使用绝对路径
+            ele_add.send_keys(r"E:\python_project\own_project\web_ui\sass_webauto\file\shenzhen.jpg")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)

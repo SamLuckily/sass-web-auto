@@ -44,7 +44,6 @@ class LiveList(BasePage):
         logger.info("直播列表页：点击删除按钮")
         with allure.step("点击删除按钮"):
             self.do_find(self.__DEL).click()
-        time.sleep(1)
         logger.info("弹框点击确定")
         with allure.step("弹框点击确定"):
             self.do_find(self.__ALERT).click()
@@ -55,7 +54,7 @@ class LiveList(BasePage):
     def get_del_result(self):
         logger.info("直播列表页：获取删除操作结果")
         logger.info("获取冒泡消息文本")
-        time.sleep(2)
+        time.sleep(1)
         with allure.step("显示等待获取冒泡消息文本"):
             toast = self.wait_element_until(self.__DEL_SUCCESS)
             msg = toast.text
@@ -79,11 +78,9 @@ class LiveList(BasePage):
         logger.info("在确认上架弹框处点击确定")
         with allure.step("在确认上架弹框处点击确定"):
             self.do_find(self.__ALERT).click()
-        time.sleep(2)
         return LiveList(self.driver)
 
     def get_listing_toast(self):
-        time.sleep(1)
         logger.info("直播列表页：获取上架成功toast")
         with allure.step("直播列表页：获取上架成功toast"):
             toast = self.wait_element_until(self.__Listing)
@@ -112,7 +109,6 @@ class LiveList(BasePage):
 
     @ui_exception_record
     def get_remove_shelves_toast(self):
-        time.sleep(1)
         logger.info("直播列表页：获取下架成功toast")
         with allure.step("直播列表页：获取下架成功toast"):
             toast = self.wait_element_until(self.__REMOVED)
@@ -122,6 +118,7 @@ class LiveList(BasePage):
 
     @ui_exception_record
     def click_edit(self):
+        time.sleep(1)
         logger.info("直播列表页：定位需要悬浮的元素")
         with allure.step("定位需要悬浮的元素"):
             hover_over = self.do_find(self.__HOVER_OVER)

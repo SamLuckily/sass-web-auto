@@ -149,7 +149,39 @@ class TestLive:
         res = list_page.click_live_manage().listing() \
             .click_edit() \
             .edit_live_name(self.live_title + "_edit") \
-            .get_edit_name_result()
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播介绍测试用例")
+    @allure.title("编辑直播介绍")
+    @allure.severity('critical')
+    @allure.description("编辑直播介绍")
+    def test_listing_edit_live_introduce(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live(self.live_title, self.live_description)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .edit_live_introduce(self.live_description + "_edit") \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播介绍图片用例")
+    @allure.title("编辑直播介绍图片")
+    @allure.severity('critical')
+    @allure.description("编辑直播介绍图片")
+    def test_listing_edit_live_introduce_image(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live(self.live_title, self.live_description)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .upload_image() \
+            .get_edit_result()
         assert "直播信息编辑成功" == res
         # 清空数据
         list_page.click_live_manage().delete_live()

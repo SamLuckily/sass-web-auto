@@ -78,5 +78,7 @@ class BasePage:
 
     def wait_element_until(self, locator: tuple):
         """显示等待，冒泡消息文本"""
+        # return WebDriverWait(self.driver, 20) \
+        #     .until(EC.presence_of_element_located(locator))
         return WebDriverWait(self.driver, 20) \
-            .until(EC.presence_of_element_located(locator))
+            .until(EC.element_to_be_clickable(locator))
