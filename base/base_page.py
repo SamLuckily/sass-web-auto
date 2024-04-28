@@ -1,11 +1,10 @@
 """父类"""
-import time
-
 from selenium import webdriver
-from selenium.webdriver import Keys
+from selenium.common import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from testcases.conftest import web_env
+from utils.log_util import logger
 
 
 class BasePage:

@@ -5,6 +5,7 @@ import time
 import allure
 from faker import Faker
 from page_objects.login_page import LoginPage
+from utils.view_password_util import generate_random_password
 
 
 @allure.feature("直播管理模块")
@@ -29,6 +30,8 @@ class TestLive:
         self.live_location = faker.city()
         # 组合成直播介绍
         self.live_description = f"本次直播标题：{self.live_title}\n时间：{self.live_time}\n主持人：{self.host_name}\n地点：{self.live_location}"
+        # 观看直播课程密码
+        self.password = generate_random_password()
 
     def teardown_class(self):
         """
@@ -180,7 +183,39 @@ class TestLive:
             .create_live(self.live_title, self.live_description)
         res = list_page.click_live_manage().listing() \
             .click_edit() \
-            .upload_image() \
+            .edit_introduce_image() \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播封面图片用例")
+    @allure.title("编辑直播封面图片")
+    @allure.severity('critical')
+    @allure.description("编辑直播封面图片")
+    def test_listing_edit_live_cover_image(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live(self.live_title, self.live_description)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .edit_cover_image() \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播设置密码用例")
+    @allure.title("编辑直播设置密码")
+    @allure.severity('critical')
+    @allure.description("编辑直播设置密码")
+    def test_listing_edit_live_password(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live(self.live_title, self.live_description)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .edit_set_up_password(self.password) \
             .get_edit_result()
         assert "直播信息编辑成功" == res
         # 清空数据

@@ -22,7 +22,10 @@ class CreateLive(BasePage):
     __CLICK_SAVE_LISTING = (By.XPATH, "//p[text()='直播信息保存成功']")
     __EDIT_TOAST = (By.XPATH, "//p[text()='直播信息编辑成功']")  # 直播信息编辑成功
     __UPLOAD_IMG = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(3) ul svg")  # 直播介绍点击上传图片按键
-    __INPUT_INTRO = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(3) input")  # 上传直播介绍input
+    __INPUT_INTRO = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(3) input")  # 上传直播介绍图input
+    __UPLOAD_COVER_IMG = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(2) ul svg")  # 直播封面上传图片按键
+    __INPUT_COVER = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(2) input")  # 上传直播封面图input
+    __SET_PASSWORD = (By.XPATH, "//input[@placeholder='密码']")   # 密码
 
     @ui_exception_record
     def create_live(self, live_name, live_intro):
@@ -34,7 +37,7 @@ class CreateLive(BasePage):
         with allure.step("输入直播介绍"):
             self.do_send_keys(live_intro, self.__LIVE_INTRO)
         logger.info("向下滑动屏幕")
-        with allure.step("向下滑动屏幕"):
+        with allure.step("向下滑动到屏幕底部"):
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         logger.info("点击选择老师")
         with allure.step("点击选择老师"):
@@ -127,6 +130,7 @@ class CreateLive(BasePage):
         logger.info("清空输入框并编辑直播名称")
         with allure.step("清空输入框并编辑直播名称"):
             self.do_send_keys(live_name, self.__LIVE_NAME)
+        logger.info("点击保存并上架")
         with allure.step("点击保存并上架"):
             self.do_find(self.__CLICK_SAVE_listing).click()
         time.sleep(1)
@@ -150,6 +154,7 @@ class CreateLive(BasePage):
         logger.info("清空输入框并编辑直播介绍")
         with allure.step("清空输入框并编辑直播介绍"):
             self.do_send_keys(live_intro, self.__LIVE_INTRO)
+        logger.info("点击保存并上架")
         with allure.step("点击保存并上架"):
             self.do_find(self.__CLICK_SAVE_listing).click()
         time.sleep(1)
@@ -157,15 +162,55 @@ class CreateLive(BasePage):
         return CreateLive(self.driver)
 
     @ui_exception_record
-    def upload_image(self):
-        logger.info("创建直播页：上传图片")
+    def edit_introduce_image(self):
+        logger.info("创建直播页：上传直播介绍图片")
+        logger.info("点击上传图片按键")
         with allure.step("点击上传图片按键"):
             self.do_find(self.__UPLOAD_IMG).click()
+        logger.info("上传图片的input标签位置")
         with allure.step("上传图片的input标签位置"):
             ele_add = self.do_find(self.__INPUT_INTRO)
+        logger.info("使用send_keys传文件路径")
         with allure.step("使用send_keys传文件路径"):
             # send_keys使用绝对路径
             ele_add.send_keys(r"E:\python_project\own_project\web_ui\sass_webauto\file\shenzhen.jpg")
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def edit_cover_image(self):
+        logger.info("创建直播页：上传直播封面图片")
+        logger.info("向下滑动200像素")
+        with allure.step("向下滑动200像素"):
+            self.driver.execute_script("window.scrollTo(0, 200);")
+        logger.info("点击上传图片按键")
+        with allure.step("点击上传图片按键"):
+            self.do_find(self.__UPLOAD_COVER_IMG).click()
+        logger.info("上传图片的input标签位置")
+        with allure.step("上传图片的input标签位置"):
+            ele_add = self.do_find(self.__INPUT_COVER)
+        logger.info("使用send_keys传文件路径")
+        with allure.step("使用send_keys传文件路径"):
+            # send_keys使用绝对路径
+            ele_add.send_keys(r"E:\python_project\own_project\web_ui\sass_webauto\file\tiantan.jpg")
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    def edit_set_up_password(self, password):
+        logger.info("创建直播页：设置密码")
+        logger.info("向下滑动400像素")
+        with allure.step("向下滑动400像素"):
+            self.driver.execute_script("window.scrollTo(0, 400);")
+        logger.info("输入密码")
+        with allure.step("输入密码"):
+            self.do_send_keys(password, self.__SET_PASSWORD)
+        logger.info("点击保存并上架")
         with allure.step("点击保存并上架"):
             self.do_find(self.__CLICK_SAVE_listing).click()
         # ==>创建直播页
