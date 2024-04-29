@@ -81,3 +81,14 @@ class BasePage:
         #     .until(EC.presence_of_element_located(locator))
         return WebDriverWait(self.driver, 20) \
             .until(EC.element_to_be_clickable(locator))
+
+    def do_clear_send_keys(self, value, by, locator=None):
+        """清空并输入"""
+        ele = self.do_find(by, locator)
+        ele.clear()
+        ele.send_keys(value)
+
+    def do_clear(self, by, locator=None):
+        """清空输入框"""
+        ele = self.do_find(by, locator)
+        ele.clear()

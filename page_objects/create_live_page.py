@@ -25,7 +25,7 @@ class CreateLive(BasePage):
     __INPUT_INTRO = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(3) input")  # 上传直播介绍图input
     __UPLOAD_COVER_IMG = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(2) ul svg")  # 直播封面上传图片按键
     __INPUT_COVER = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(2) input")  # 上传直播封面图input
-    __SET_PASSWORD = (By.XPATH, "//input[@placeholder='密码']")   # 密码
+    __SET_PASSWORD = (By.XPATH, "//input[@placeholder='密码']")  # 密码
 
     @ui_exception_record
     def create_live(self, live_name, live_intro):
@@ -210,6 +210,73 @@ class CreateLive(BasePage):
         logger.info("输入密码")
         with allure.step("输入密码"):
             self.do_send_keys(password, self.__SET_PASSWORD)
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def create_live_password(self, live_name, live_intro, live_password):
+        logger.info("创建直播页：创建直播点击保存")
+        logger.info("输入直播名称")
+        with allure.step("输入直播名称"):
+            self.do_send_keys(live_name, self.__LIVE_NAME)
+        logger.info("输入直播介绍")
+        with allure.step("输入直播介绍"):
+            self.do_send_keys(live_intro, self.__LIVE_INTRO)
+        logger.info("向下滑动屏幕")
+        with allure.step("向下滑动到屏幕底部"):
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        logger.info("设置密码")
+        with allure.step("设置密码"):
+            self.do_send_keys(live_password, self.__SET_PASSWORD)
+        logger.info("点击选择老师")
+        with allure.step("点击选择老师"):
+            self.do_find(self.__CLICK_CHOOSE).click()
+        time.sleep(1)
+        logger.info("选择老师")
+        with allure.step("选择老师"):
+            self.do_find(self.__CHOOSE_TEACHER).click()
+        logger.info("点击请选择教室")
+        with allure.step("点击请选择教室"):
+            self.do_find(self.__CLICK_ROOM).click()
+        time.sleep(1)
+        # 选择E02-Pro
+        logger.info("选择教室")
+        with allure.step("选择教室"):
+            self.do_find(self.__CHOOSE_ROOM).click()
+        logger.info("点击保存")
+        with allure.step("点击保存"):
+            self.do_find(self.__CLICK_SAVE).click()
+        time.sleep(1)
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def clear_and_set_new_password(self, password):
+        logger.info("创建直播页：清空密码并设置新密码")
+        logger.info("向下滑动400像素")
+        with allure.step("向下滑动400像素"):
+            self.driver.execute_script("window.scrollTo(0, 400);")
+        logger.info("清空并输入密码")
+        with allure.step("清空并输入密码"):
+            self.do_clear_send_keys(password, self.__SET_PASSWORD)
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def clear_password(self):
+        logger.info("创建直播页：清空观看密码")
+        logger.info("向下滑动400像素")
+        with allure.step("向下滑动400像素"):
+            self.driver.execute_script("window.scrollTo(0, 400);")
+        logger.info("清空观看密码")
+        with allure.step("清空观看密码"):
+            self.do_clear(self.__SET_PASSWORD)
         logger.info("点击保存并上架")
         with allure.step("点击保存并上架"):
             self.do_find(self.__CLICK_SAVE_listing).click()

@@ -205,10 +205,10 @@ class TestLive:
         # 清空数据
         list_page.click_live_manage().delete_live()
 
-    @allure.story("保存并上架直播后编辑直播设置密码用例")
-    @allure.title("编辑直播设置密码")
+    @allure.story("保存并上架直播后编辑直播设置观看密码用例")
+    @allure.title("编辑直播设置观看密码")
     @allure.severity('critical')
-    @allure.description("编辑直播设置密码")
+    @allure.description("编辑直播设置观看密码")
     def test_listing_edit_live_password(self):
         list_page = self.live_list \
             .click_add() \
@@ -216,6 +216,38 @@ class TestLive:
         res = list_page.click_live_manage().listing() \
             .click_edit() \
             .edit_set_up_password(self.password) \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播修改观看密码用例")
+    @allure.title("编辑直播修改观看密码")
+    @allure.severity('critical')
+    @allure.description("编辑直播修改观看密码")
+    def test_listing_edit_live_change_password(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live_password(self.live_title, self.live_description, self.password)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .clear_and_set_new_password(self.password) \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播清空观看密码用例")
+    @allure.title("编辑直播清空观看密码")
+    @allure.severity('critical')
+    @allure.description("编辑直播清空观看密码")
+    def test_listing_edit_live_clear_password(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live_password(self.live_title, self.live_description, self.password)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .clear_password() \
             .get_edit_result()
         assert "直播信息编辑成功" == res
         # 清空数据
