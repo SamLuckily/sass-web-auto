@@ -26,6 +26,9 @@ class CreateLive(BasePage):
     __UPLOAD_COVER_IMG = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(2) ul svg")  # 直播封面上传图片按键
     __INPUT_COVER = (By.CSS_SELECTOR, ".el-form-item__content>div:nth-child(2) input")  # 上传直播封面图input
     __SET_PASSWORD = (By.XPATH, "//input[@placeholder='密码']")  # 密码
+    __START_TIME = (By.XPATH, "//input[@placeholder='设置开始时间']")  # 设置开始时间
+    __END_TIME = (By.XPATH, "//input[@placeholder='设置结束时间']")  # 设置结束时间
+    __INFO_ERROR_TIME = (By.XPATH, "//*[text()='结束时间不能早于开始时间']")  # 结束时间不能早于开始时间
 
     @ui_exception_record
     def create_live(self, live_name, live_intro):
@@ -282,3 +285,78 @@ class CreateLive(BasePage):
             self.do_find(self.__CLICK_SAVE_listing).click()
         # ==>创建直播页
         return CreateLive(self.driver)
+
+    @ui_exception_record
+    def change_start_time(self, start_time):
+        logger.info("创建直播页：修改开始时间")
+        logger.info("向下滑动500像素")
+        with allure.step("向下滑动500像素"):
+            self.driver.execute_script("window.scrollTo(0, 500);")
+        logger.info("清空现有时间并新设置时间多出当前时间10分钟")
+        with allure.step("清空现有开始时间并新设置时间多出当前时间10分钟"):
+            self.do_clear_send_keys(start_time, self.__START_TIME)
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def change_end_time(self, end_time):
+        logger.info("创建直播页：修改结束时间")
+        logger.info("向下滑动500像素")
+        with allure.step("向下滑动500像素"):
+            self.driver.execute_script("window.scrollTo(0, 500);")
+        logger.info("清空现有结束时间并新设置时间多出当前时间130分钟")
+        with allure.step("清空现有时间并新设置结束时间多出当前时间130分钟"):
+            self.do_clear_send_keys(end_time, self.__END_TIME)
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def change_start_end_time(self, start_time, end_time):
+        logger.info("创建直播页：修改开始和结束时间")
+        logger.info("向下滑动500像素")
+        with allure.step("向下滑动500像素"):
+            self.driver.execute_script("window.scrollTo(0, 500);")
+        logger.info("清空现有时间并新设置开始和结束时间")
+        with allure.step("清空现有时间并新设置开始和结束时间"):
+            self.do_clear_send_keys(start_time, self.__START_TIME)
+            self.do_clear_send_keys(end_time, self.__END_TIME)
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def start_greater_than_end_time(self, start_time, end_time):
+        logger.info("创建直播页：修改开始时间大于结束时间")
+        logger.info("向下滑动500像素")
+        with allure.step("向下滑动500像素"):
+            self.driver.execute_script("window.scrollTo(0, 500);")
+        logger.info("清空现有时间并新设置开始时间大于结束时间")
+        with allure.step("清空现有时间并新设置开始时间大于结束时间"):
+            self.do_clear_send_keys(start_time, self.__START_TIME)
+            self.do_clear_send_keys(end_time, self.__END_TIME)
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def info_error_time(self):
+        logger.info("创建直播页：获取开始时间大于结束时间提示语")
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        logger.info("获取开始时间大于结束时间提示语")
+        with allure.step("获取开始时间大于结束时间提示语"):
+            info = self.wait_element_until(self.__INFO_ERROR_TIME)
+            msg = info.text
+        logger.info(f"提示信息为：{msg}")
+        return msg

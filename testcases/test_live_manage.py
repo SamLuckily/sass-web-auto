@@ -2,6 +2,7 @@
 # @Author   : Sam
 # @time 2024-03-09 11:03
 import time
+from datetime import datetime, timedelta
 import allure
 from faker import Faker
 from page_objects.login_page import LoginPage
@@ -32,6 +33,15 @@ class TestLive:
         self.live_description = f"本次直播标题：{self.live_title}\n时间：{self.live_time}\n主持人：{self.host_name}\n地点：{self.live_location}"
         # 观看直播课程密码
         self.password = generate_random_password()
+        # 获取当前本地时间
+        now = datetime.now()
+        # 开始时间计算多出10分钟的时间
+        self.ten_minutes_later = now + timedelta(minutes=10)
+        # 结束时间计算多出130分钟的时间
+        self.two_hours_later = now + timedelta(minutes=130)
+        # 格式化时间为字符串，以便设置到时间选择框中（格式根据实际情况调整）
+        self.formatted_start_time = self.ten_minutes_later.strftime("%Y-%m-%d %H:%M")
+        self.formatted_end_time = self.two_hours_later.strftime("%Y-%m-%d %H:%M")
 
     def teardown_class(self):
         """
@@ -52,7 +62,7 @@ class TestLive:
         assert "直播信息保存成功" == res
         # 清理数据
         create_page.click_live_manage().delete_live()
-        time.sleep(2)
+        time.sleep(1)
 
     @allure.story("查看直播测试用例")
     @allure.title("查看直播")
@@ -250,5 +260,69 @@ class TestLive:
             .clear_password() \
             .get_edit_result()
         assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播开始时间用例")
+    @allure.title("编辑直播开始时间")
+    @allure.severity('critical')
+    @allure.description("编辑直播开始时间")
+    def test_listing_edit_live_start_time(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live_password(self.live_title, self.live_description, self.password)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .change_start_time(self.formatted_start_time) \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播结束时间用例")
+    @allure.title("编辑直播结束时间")
+    @allure.severity('critical')
+    @allure.description("编辑直播结束时间")
+    def test_listing_edit_live_end_time(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live_password(self.live_title, self.live_description, self.password)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .change_end_time(self.formatted_end_time) \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播开始和结束时间用例")
+    @allure.title("编辑直播开始和结束时间")
+    @allure.severity('critical')
+    @allure.description("编辑直播开始和结束时间")
+    def test_listing_edit_live_start_end_time(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live_password(self.live_title, self.live_description, self.password)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .change_start_end_time(self.formatted_start_time, self.formatted_end_time) \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播开始时间大于结束时间用例")
+    @allure.title("编辑直播开始时间大于结束时间")
+    @allure.severity('critical')
+    @allure.description("编辑直播开始时间大于结束时间")
+    def test_listing_edit_live_start_greater_than_end_time(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live_password(self.live_title, self.live_description, self.password)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .start_greater_than_end_time(self.formatted_end_time, self.formatted_start_time) \
+            .info_error_time()
+        assert "结束时间不能早于开始时间" == res
         # 清空数据
         list_page.click_live_manage().delete_live()
