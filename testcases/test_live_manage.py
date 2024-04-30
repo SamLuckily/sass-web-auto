@@ -42,6 +42,8 @@ class TestLive:
         # 格式化时间为字符串，以便设置到时间选择框中（格式根据实际情况调整）
         self.formatted_start_time = self.ten_minutes_later.strftime("%Y-%m-%d %H:%M")
         self.formatted_end_time = self.two_hours_later.strftime("%Y-%m-%d %H:%M")
+        # 初始访问量/在线人数 生成随机整数
+        self.random_int = faker.random_int(min=0, max=100)
 
     def teardown_class(self):
         """
@@ -387,6 +389,37 @@ class TestLive:
             .click_edit() \
             .edit_live_save() \
             .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("创建直播上架后编辑直播页点击取消测试用例")
+    @allure.title("编辑直播页点击取消")
+    @allure.severity('critical')
+    @allure.description("编辑直播页点击取消")
+    def test_listing_edit_cancel(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live_playback(self.live_title, self.live_description)
+        list_page.click_live_manage().listing() \
+            .click_edit() \
+            .edit_live_cancel()
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("创建直播上架后编辑直播添加高级功能测试用例")
+    @allure.title("编辑直播添加高级功能")
+    @allure.severity('critical')
+    @allure.description("编辑直播添加高级功能")
+    def test_listing_edit_advanced_features(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live(self.live_title, self.live_description)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .edit_click_advanced_features() \
+            .edit_advanced_features(self.random_int, self.random_int) \
+            .get_edit_advance_features_result()
         assert "直播信息编辑成功" == res
         # 清空数据
         list_page.click_live_manage().delete_live()

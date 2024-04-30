@@ -36,7 +36,7 @@ class LiveList(BasePage):
         with allure.step("点击查看按钮"):
             self.do_find(self.__VIEW).click()
         # ==>查看直播页
-        from page_objects.live_info import LiveInfo
+        from page_objects.live_info_page import LiveInfo
         return LiveInfo(self.driver)
 
     @ui_exception_record

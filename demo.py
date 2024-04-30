@@ -64,3 +64,15 @@ def generate_random_password(min_length=4, max_length=16):
 password = generate_random_password()
 print("随机生成的密码为:", password)
 
+# 创建一个 Faker 实例
+fake = Faker()
+
+# 生成随机整数
+random_int = fake.random_int(min=0, max=100)
+
+# 生成随机浮点数
+random_float = fake.random_number(digits=2)
+
+print("随机整数：", random_int)
+print("随机浮点数：", random_float)
+

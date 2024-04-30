@@ -30,10 +30,10 @@ class CreateLive(BasePage):
     __START_TIME = (By.XPATH, "//input[@placeholder='设置开始时间']")  # 设置开始时间
     __END_TIME = (By.XPATH, "//input[@placeholder='设置结束时间']")  # 设置结束时间
     __INFO_ERROR_TIME = (By.XPATH, "//*[text()='结束时间不能早于开始时间']")  # 结束时间不能早于开始时间
-    __PLAYBACK_BUTTON = (
-    By.CSS_SELECTOR, "#pane-baseInfo>form>div:nth-child(9) div>label:nth-child(1)>span>span")  # 直播回放按钮是
-    __PLAYBACK_BUTTON_NO = (
-    By.CSS_SELECTOR, "#pane-baseInfo>form>div:nth-child(9) div>label:nth-child(2)>span>span")  # 直播回放按钮选否
+    __PLAYBACK_BUTTON = (By.CSS_SELECTOR, "#pane-baseInfo>form>div:nth-child(9) div>label:nth-child(1)>span>span")  # 直播回放按钮是
+    __PLAYBACK_BUTTON_NO = (By.CSS_SELECTOR, "#pane-baseInfo>form>div:nth-child(9) div>label:nth-child(2)>span>span")  # 直播回放按钮选否
+    __CLICK_CANCEL = (By.CSS_SELECTOR, ".step-btn-group>button:nth-child(1)")  # 点击取消
+    __ADVANCED_FEATURES = (By.XPATH, "//div[text()='高级功能']")
 
     @ui_exception_record
     def create_live(self, live_name, live_intro):
@@ -474,5 +474,30 @@ class CreateLive(BasePage):
             self.do_find(self.__CLICK_SAVE).click()
         # ==>创建直播页
         return CreateLive(self.driver)
+
+    @ui_exception_record
+    def edit_live_cancel(self):
+        logger.info("创建直播页：点击取消")
+        logger.info("滑动到底部")
+        with allure.step("滑动到底部"):
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        logger.info("点击取消")
+        with allure.step("点击取消"):
+            self.do_find(self.__CLICK_CANCEL).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def edit_click_advanced_features(self):
+        time.sleep(1)
+        logger.info("创建直播页：点击高级功能")
+        logger.info("点击高级功能")
+        with allure.step("点击高级功能"):
+            self.do_find(self.__ADVANCED_FEATURES).click()
+        # ==>高级功能页
+        from page_objects.advanced_features_page import AdvancedFeatures
+        return AdvancedFeatures(self.driver)
+
+
 
 
