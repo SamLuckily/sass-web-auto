@@ -15,6 +15,7 @@ class CreateLive(BasePage):
     __CHOOSE_TEACHER = (By.XPATH, "//span[text()='常同学']")  # 选择老师  //span[text()='常同学']
     __CLICK_ROOM = (By.XPATH, "//input[@placeholder='请选择教室']")  # 点击选择教室
     __CHOOSE_ROOM = (By.XPATH, "//span[text()='ITC015G2']")  # 选择教室E02-ProITC015G2  5G车教室
+    __CHOOSE_ROOM_1 = (By.XPATH, "//span[text()='ITC015G1']")  # 选择教室E02-ProITC015G1  5G车教室
     __CLICK_SAVE = (By.CSS_SELECTOR, ".step-btn-group>button:nth-child(2)")  # 点击保存
     __TOAST_ASSERT = (By.XPATH, "//p[text()='直播信息保存成功']")  # toast信息
     __LIVE_MANAGE = (By.XPATH, "//span[@class='el-breadcrumb__inner is-link' and text()='直播管理']")  # 点击直播管理
@@ -29,6 +30,10 @@ class CreateLive(BasePage):
     __START_TIME = (By.XPATH, "//input[@placeholder='设置开始时间']")  # 设置开始时间
     __END_TIME = (By.XPATH, "//input[@placeholder='设置结束时间']")  # 设置结束时间
     __INFO_ERROR_TIME = (By.XPATH, "//*[text()='结束时间不能早于开始时间']")  # 结束时间不能早于开始时间
+    __PLAYBACK_BUTTON = (
+    By.CSS_SELECTOR, "#pane-baseInfo>form>div:nth-child(9) div>label:nth-child(1)>span>span")  # 直播回放按钮是
+    __PLAYBACK_BUTTON_NO = (
+    By.CSS_SELECTOR, "#pane-baseInfo>form>div:nth-child(9) div>label:nth-child(2)>span>span")  # 直播回放按钮选否
 
     @ui_exception_record
     def create_live(self, live_name, live_intro):
@@ -57,6 +62,43 @@ class CreateLive(BasePage):
         logger.info("选择教室")
         with allure.step("选择教室"):
             self.do_find(self.__CHOOSE_ROOM).click()
+        logger.info("点击保存")
+        with allure.step("点击保存"):
+            self.do_find(self.__CLICK_SAVE).click()
+        time.sleep(1)
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def create_live_playback(self, live_name, live_intro):
+        logger.info("创建直播页：创建直播点击保存")
+        logger.info("输入直播名称")
+        with allure.step("输入直播名称"):
+            self.do_send_keys(live_name, self.__LIVE_NAME)
+        logger.info("输入直播介绍")
+        with allure.step("输入直播介绍"):
+            self.do_send_keys(live_intro, self.__LIVE_INTRO)
+        logger.info("向下滑动屏幕")
+        with allure.step("向下滑动到屏幕底部"):
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        logger.info("点击选择老师")
+        with allure.step("点击选择老师"):
+            self.do_find(self.__CLICK_CHOOSE).click()
+        time.sleep(1)
+        logger.info("选择老师")
+        with allure.step("选择老师"):
+            self.do_find(self.__CHOOSE_TEACHER).click()
+        logger.info("点击请选择教室")
+        with allure.step("点击请选择教室"):
+            self.do_find(self.__CLICK_ROOM).click()
+        time.sleep(1)
+        # 选择E02-Pro
+        logger.info("选择教室")
+        with allure.step("选择教室"):
+            self.do_find(self.__CHOOSE_ROOM).click()
+        logger.info("直播回放选择是")
+        with allure.step("直播回放选是"):
+            self.do_find(self.__PLAYBACK_BUTTON).click()
         logger.info("点击保存")
         with allure.step("点击保存"):
             self.do_find(self.__CLICK_SAVE).click()
@@ -360,3 +402,77 @@ class CreateLive(BasePage):
             msg = info.text
         logger.info(f"提示信息为：{msg}")
         return msg
+
+    @ui_exception_record
+    def edit_classroom(self):
+        logger.info("创建直播页：切换直播教室")
+        logger.info("滑动到底部")
+        with allure.step("滑动到底部"):
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        logger.info("点击请选择教室")
+        with allure.step("点击请选择教室"):
+            self.do_find(self.__CLICK_ROOM).click()
+        time.sleep(1)
+        # 选择E02-Pro
+        logger.info("选择教室")
+        with allure.step("选择教室"):
+            self.do_find(self.__CHOOSE_ROOM_1).click()
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def edit_live_playback(self):
+        logger.info("创建直播页：编辑直播回放选是")
+        logger.info("滑动到底部")
+        with allure.step("滑动到底部"):
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        with allure.step("直播回放选是"):
+            self.do_find(self.__PLAYBACK_BUTTON).click()
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def edit_live_playback_no(self):
+        logger.info("创建直播页：编辑直播回放选否")
+        logger.info("滑动到底部")
+        with allure.step("滑动到底部"):
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        with allure.step("直播回放选否"):
+            self.do_find(self.__PLAYBACK_BUTTON_NO).click()
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def edit_live_save_and_list(self):
+        logger.info("创建直播页：点击保存并上架")
+        logger.info("滑动到底部")
+        with allure.step("滑动到底部"):
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        logger.info("点击保存并上架")
+        with allure.step("点击保存并上架"):
+            self.do_find(self.__CLICK_SAVE_listing).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+    @ui_exception_record
+    def edit_live_save(self):
+        logger.info("创建直播页：点击保存")
+        logger.info("滑动到底部")
+        with allure.step("滑动到底部"):
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        logger.info("点击保存")
+        with allure.step("点击保存"):
+            self.do_find(self.__CLICK_SAVE).click()
+        # ==>创建直播页
+        return CreateLive(self.driver)
+
+

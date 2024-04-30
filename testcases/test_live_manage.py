@@ -326,3 +326,67 @@ class TestLive:
         assert "结束时间不能早于开始时间" == res
         # 清空数据
         list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播回放选是测试用例")
+    @allure.title("编辑直播回放选是")
+    @allure.severity('critical')
+    @allure.description("编辑直播回放选是")
+    def test_listing_edit_live_playback(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live_password(self.live_title, self.live_description, self.password)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .edit_live_playback() \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("保存并上架直播后编辑直播回放选否测试用例")
+    @allure.title("编辑直播回放选否")
+    @allure.severity('critical')
+    @allure.description("编辑直播回放选否")
+    def test_listing_edit_live_playback_no(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live_playback(self.live_title, self.live_description)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .edit_live_playback_no() \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("创建直播后编辑直播页点击保存并上架测试用例")
+    @allure.title("编辑直播页点击保存并上架")
+    @allure.severity('critical')
+    @allure.description("编辑直播页点击保存并上架")
+    def test_listing_edit_live_save_and_list(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live_playback(self.live_title, self.live_description)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .edit_live_save_and_list() \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
+
+    @allure.story("创建直播后编辑直播页点击保存测试用例")
+    @allure.title("编辑直播页点击保存")
+    @allure.severity('critical')
+    @allure.description("编辑直播页点击保存")
+    def test_listing_edit_live_save(self):
+        list_page = self.live_list \
+            .click_add() \
+            .create_live_playback(self.live_title, self.live_description)
+        res = list_page.click_live_manage().listing() \
+            .click_edit() \
+            .edit_live_save() \
+            .get_edit_result()
+        assert "直播信息编辑成功" == res
+        # 清空数据
+        list_page.click_live_manage().delete_live()
