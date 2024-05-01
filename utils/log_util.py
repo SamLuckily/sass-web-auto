@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import datetime
 from logging.handlers import RotatingFileHandler
 
 # 绑定句柄到logger对象
@@ -10,8 +11,12 @@ root_path = os.path.dirname(os.path.abspath(__file__))
 log_dir_path = os.sep.join([root_path, '..', f'/logs'])
 if not os.path.isdir(log_dir_path):
     os.mkdir(log_dir_path)
+# 日志名字
+filename = "Log" + datetime.now().strftime('%Y-%m-%d') + ".log"
 # 创建日志记录器，指明日志保存路径,每个日志的大小，保存日志的上限
-file_log_handler = RotatingFileHandler(os.sep.join([log_dir_path, 'log.log']), maxBytes=1024 * 1024, backupCount=10,
+# file_log_handler = RotatingFileHandler(os.sep.join([log_dir_path, 'log.log']), maxBytes=1024 * 1024, backupCount=10,
+#                                        encoding='utf-8')
+file_log_handler = RotatingFileHandler(os.sep.join([log_dir_path, filename]), maxBytes=1024 * 1024, backupCount=10,
                                        encoding='utf-8')
 # 设置日志的格式
 date_string = '%Y-%m-%d %H:%M:%S'

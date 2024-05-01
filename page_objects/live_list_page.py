@@ -17,9 +17,11 @@ class LiveList(BasePage):
     __HOVER_OVER = (By.CSS_SELECTOR, "#app .vxe-table--fixed-wrapper tbody>tr:nth-child(1)>td>div div>span")  # 定位需要悬浮元素
     __OPTIONS = (By.CSS_SELECTOR, "body>div:nth-child(2)>div:nth-child(3) div>ul>li:nth-child(2)")  # 定位鼠标悬浮后上架字样
     __Listing = (By.XPATH, "//*[text()='上架成功']")
-    __REMOVE_SHELVES = (By.XPATH, "/html/body/div[2]/div[12]/div/div[1]/div/ul/li[2]")  # 定位下架
+    # __REMOVE_SHELVES = (By.XPATH, "/html/body/div[2]/div[12]/div/div[1]/div/ul/li[2]")  # 定位下架
+    __REMOVE_SHELVES = (By.XPATH, "/html/body/div[2]/div[10]/div/div/div/ul/li[2]")
     __REMOVED = (By.XPATH, "//*[text()='下架成功']")
-    __EDIT = (By.XPATH, "/html/body/div[2]/div[12]/div/div[1]/div/ul/li[1]")  # 点击编辑
+    # __EDIT = (By.XPATH, "/html/body/div[2]/div[12]/div/div[1]/div/ul/li[1]")  # 点击编辑
+    __EDIT = (By.XPATH, "/html/body/div[2]/div[10]/div/div/div/ul/li[1]")
 
     @ui_exception_record
     def click_add(self):
